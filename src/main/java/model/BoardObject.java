@@ -9,6 +9,7 @@ package model;
 public class BoardObject {
 	private int x;
 	private int y;
+	private boolean center;
 	public int getX() {
 		return x;
 	}
@@ -25,5 +26,9 @@ public class BoardObject {
 	}
 	public boolean isCenter() {
 		return false;
+	}
+	public void setCenter(boolean center) {
+		this.center = center;
+		
 	}
 }
