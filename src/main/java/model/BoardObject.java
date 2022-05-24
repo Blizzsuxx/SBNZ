@@ -6,7 +6,7 @@
 package model;
 
 
-public class BoardObject {
+public abstract class BoardObject {
 	private int x;
 	private int y;
 	private boolean center;
