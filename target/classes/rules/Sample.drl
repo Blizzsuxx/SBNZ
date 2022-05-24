@@ -7,7 +7,7 @@ rule "Is BoardObject In Center"
     when
         boardObject : BoardObject( x == 4, y == 4)
     then
-        System.out.println( "BoardObject is in center" );
+        System.out.println( boardObject.getClass().getName() + " is in center" );
         
         boardObject.setCenter( true );
         update( boardObject );
