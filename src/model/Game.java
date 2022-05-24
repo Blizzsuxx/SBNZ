@@ -3,11 +3,10 @@
 *
 * Drop us a line or two at feedback@archetypesoftware.com: we would love to hear from you!
 */
-package root;
+package model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
 
 
 public class Game {
@@ -17,7 +16,7 @@ public class Game {
 	public int getAiDepth() {
 		return aiDepth;
 	}
-	public Set<Player> getPlayers() {
+	public ArrayList<Player> getPlayers() {
 		return players;
 	}
 	public Board getBoard() {

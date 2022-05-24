@@ -3,8 +3,15 @@
 *
 * Drop us a line or two at feedback@archetypesoftware.com: we would love to hear from you!
 */
-package root;
+package model;
 
-public interface Killable {
-	boolean isDead();
+import java.util.List;
+
+
+public class Reporter extends Piece {
+	public List<Move> getMoves() {
+		return null;
+	}
+	public void captureEvent() {
+	}
 }

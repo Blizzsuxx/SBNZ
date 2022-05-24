@@ -3,12 +3,12 @@
 *
 * Drop us a line or two at feedback@archetypesoftware.com: we would love to hear from you!
 */
-package root;
+package model;
 
 import java.util.List;
 
 
-public class Assasin extends Piece {
+public class Necromobile extends Piece {
 	public List<Move> getMoves() {
 		return null;
 	}
