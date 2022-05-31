@@ -9,8 +9,8 @@ import java.util.List;
 
 
 public class Necromobile extends Piece {
-	public Necromobile(int i, int j) {
-		super(i, j);
+	public Necromobile(int i, int j, Player player) {
+		super(i, j, player);
 		//TODO Auto-generated constructor stub
 	}
 	public List<Move> getMoves() {
