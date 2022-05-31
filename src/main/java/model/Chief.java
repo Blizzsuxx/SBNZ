@@ -10,6 +10,10 @@ import java.util.List;
 
 
 public class Chief extends Piece {
+	public Chief(int i, int j, Player player) {
+		super(i, j, player);
+		//TODO Auto-generated constructor stub
+	}
 	public List<Move> getMoves() {
 		return null;
 	}

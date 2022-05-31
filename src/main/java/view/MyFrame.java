@@ -6,7 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import controller.GameController;
+import controller.DroolsController;
+import model.Piece;
 import net.miginfocom.swing.MigLayout;
 
 public class MyFrame extends JFrame {
@@ -26,10 +27,39 @@ public class MyFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				GameController.getInstance().fireAllRules();
+				DroolsController.getInstance().fireAllRules();
 			}
 		});
 		this.add(fireRules);
+		
+		JButton addCenterPiece = new JButton("Add Center Piece");
+		JButton addNotCenterPiece = new JButton("Add Not Center Piece");
+		this.add(addCenterPiece);
+		this.add(addNotCenterPiece);
+		addCenterPiece.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Piece p = new Piece();
+				p.setX(4);
+				p.setY(4);
+				DroolsController.getInstance().addToRules(p);
+			}
+		});
+		
+		addNotCenterPiece.addActionListener( new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Piece p = new Piece();
+				p.setX(4);
+				p.setY(3);
+				DroolsController.getInstance().addToRules(p);
+			}
+		});
+		
 	}
 
 }

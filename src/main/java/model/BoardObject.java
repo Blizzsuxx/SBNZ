@@ -10,25 +10,35 @@ public abstract class BoardObject {
 	private int x;
 	private int y;
 	private boolean center;
+	
+	public BoardObject(int i, int j) {
+		this.x = i;
+		this.y = j;
+	}
 	public int getX() {
 		return x;
 	}
 	public int getY() {
 		return y;
 	}
-	public BoardObject setX(int x) {
+	public void setX(int x) {
 		this.x = x;
-		return this;
 	}
-	public BoardObject setY(int y) {
+	public void setY(int y) {
 		this.y = y;
-		return this;
 	}
 	public boolean isCenter() {
-		return false;
+		return center;
+		
 	}
 	public void setCenter(boolean center) {
 		this.center = center;
 		
 	}
+	@Override
+	public String toString() {
+		return "BoardObject [x=" + x + ", y=" + y + ", center=" + center + "]";
+	}
+	
+	
 }

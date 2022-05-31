@@ -7,16 +7,37 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class Game {
-	private int aiDepth;
-	private ArrayList<Player> players = new ArrayList<>();
+	
+	private static Game instance = null;
+	
+	private int aiDepth = 3;
+	private List<Player> players = new ArrayList<>();
 	private Board board;
+	
+	public static Game getInstance() {
+		if(instance == null) {
+			instance = new Game();
+		}
+		return instance;
+	}
+	private Game() {
+		this.board = new Board();
+		this.players.add( new Player(0, 0));
+		this.players.add( new Player(this.board.getColumnCount()-1, 0));
+		this.players.add( new Player(0, this.board.getRowCount()-1));
+		this.players.add( new Player(this.board.getColumnCount()-1, this.board.getRowCount()-1));
+		
+	}
+	
+	
 	public int getAiDepth() {
 		return aiDepth;
 	}
-	public ArrayList<Player> getPlayers() {
+	public List<Player> getPlayers() {
 		return players;
 	}
 	public Board getBoard() {

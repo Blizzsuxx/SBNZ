@@ -9,6 +9,10 @@ import java.util.List;
 
 
 public class Diplomat extends Piece {
+	public Diplomat(int i, int j, Player player) {
+		super(i, j, player);
+		//TODO Auto-generated constructor stub
+	}
 	public List<Move> getMoves() {
 		return null;
 	}

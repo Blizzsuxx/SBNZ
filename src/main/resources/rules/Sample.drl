@@ -1,14 +1,30 @@
 package com.sample
  
 import model.BoardObject;
+import model.Chief;
  
 rule "Is BoardObject In Center"
 	no-loop true
     when
-        boardObject : BoardObject( x == 4, y == 4)
+        $boardObject : BoardObject( x == 4, y == 4)
     then
-        System.out.println( boardObject.getClass().getName() + " is in center" );
-        
-        boardObject.setCenter( true );
-        update( boardObject );
+        System.out.println( $boardObject.getClass().getName() + " is in center" );
+        System.out.println($boardObject);
+        $boardObject.setCenter(true);
+		update($boardObject);
+		System.out.println($boardObject);      
 end
+
+rule "A Piece just got into center"
+    when
+        $piece : Chief( center == true)
+    then
+    
+        System.out.println( "Chief is in center, rearrange player order" ); 
+end
+
+rule "Appraise MinMaxNode"
+	when
+		$node : MinMaxNode()
+	then
+		System.out.println("Node found");

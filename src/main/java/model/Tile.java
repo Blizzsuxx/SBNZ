@@ -7,6 +7,9 @@ package model;
 
 public class Tile extends BoardObject {
 	private Piece piece;
+	public Tile(int i, int j) {
+		super(i, j);
+	}
 	public Piece getPiece() {
 		return piece;
 	}

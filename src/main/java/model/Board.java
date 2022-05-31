@@ -10,9 +10,23 @@ import java.util.ArrayList;
 
 
 public class Board {
-	private ArrayList<ArrayList<Tile>> tiles;
-	private int rowCount;
-	private int columnCount;
+	private ArrayList<ArrayList<Tile>> tiles = new ArrayList<ArrayList<Tile>>();
+	private int rowCount = 9;
+	private int columnCount = 9;
+	
+	
+	public Board() {
+		for(int i = 0; i < this.columnCount; i++) {
+			tiles.add( new ArrayList<Tile>());
+		}
+		for(int i = 0; i < this.columnCount; i++) {
+			for(int j = 0; j < this.rowCount; j++) {
+				tiles.get(i).add(new Tile(i, j));
+			}
+		}
+	}
+	
+	
 	public ArrayList<ArrayList<Tile>> getTiles() {
 		return tiles;
 	}
@@ -33,5 +47,9 @@ public class Board {
 	public Board setColumnCount(int columnCount) {
 		this.columnCount = columnCount;
 		return this;
+	}
+	
+	public Tile getTile(int x, int y) {
+		return this.tiles.get(x).get(y);
 	}
 }
