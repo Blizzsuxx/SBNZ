@@ -25,6 +25,7 @@ public class Game {
 		return instance;
 	}
 	private Game() {
+		instance = this;
 		this.board = new Board();
 		this.players.add( new Player(0, 0));
 		this.players.add( new Player(this.board.getColumnCount()-1, 0));
@@ -74,5 +75,18 @@ public class Game {
 	public Game unlinkBoard() {
 		setBoard(null);
 		return this;
+	}
+	
+	public Player nextPlayer(Player player) {
+		for(int i = 0; i < players.size(); i++) {
+			if(players.get(i).equals(player)) {
+				return this.getPlayer(i+1);
+			}
+		}
+		return null;
+	}
+	private Player getPlayer(int i) {
+		i = i % players.size();
+		return this.players.get(i);
 	}
 }

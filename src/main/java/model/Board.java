@@ -9,6 +9,7 @@ package model;
 import java.util.ArrayList;
 
 
+
 public class Board {
 	private ArrayList<ArrayList<Tile>> tiles = new ArrayList<ArrayList<Tile>>();
 	private int rowCount = 9;
@@ -50,6 +51,11 @@ public class Board {
 	}
 	
 	public Tile getTile(int x, int y) {
-		return this.tiles.get(x).get(y);
+		try {
+		
+			return this.tiles.get(x).get(y);
+		}catch(Exception e) {
+			return null;
+		}
 	}
 }

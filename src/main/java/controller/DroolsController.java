@@ -4,7 +4,9 @@ import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
+import model.Game;
 import model.MinMaxNode;
+import model.Player;
 
 public class DroolsController extends Thread {
 	
@@ -37,7 +39,17 @@ public class DroolsController extends Thread {
           !"Game Over".equals(receivedMessage);
           receivedMessage = load.receive()) {
             
-            this.addToRules(receivedMessage);
+        	if(receivedMessage instanceof Game) {
+        		this.kSession.setGlobal("game", receivedMessage);
+        		Game game = (Game) receivedMessage;
+        		for(Player p : game.getPlayers()) {
+        			this.addToRules(p);
+        		}
+        	} else {
+        		this.addToRules(receivedMessage);
+        	}
+        	
+            
             
         }
     }

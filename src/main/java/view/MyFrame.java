@@ -32,33 +32,7 @@ public class MyFrame extends JFrame {
 		});
 		this.add(fireRules);
 		
-		JButton addCenterPiece = new JButton("Add Center Piece");
-		JButton addNotCenterPiece = new JButton("Add Not Center Piece");
-		this.add(addCenterPiece);
-		this.add(addNotCenterPiece);
-		addCenterPiece.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				Piece p = new Piece();
-				p.setX(4);
-				p.setY(4);
-				DroolsController.getInstance().addToRules(p);
-			}
-		});
 		
-		addNotCenterPiece.addActionListener( new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				Piece p = new Piece();
-				p.setX(4);
-				p.setY(3);
-				DroolsController.getInstance().addToRules(p);
-			}
-		});
 		
 	}
 

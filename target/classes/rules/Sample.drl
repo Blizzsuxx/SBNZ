@@ -1,7 +1,10 @@
 package com.sample
  
-import model.BoardObject;
-import model.Chief;
+import model.*
+import java.util.List;
+import java.util.ArrayList;
+import java.lang.Math;
+global Game game;
  
 rule "Is BoardObject In Center"
 	no-loop true
@@ -21,4 +24,143 @@ rule "A Piece just got into center"
     then
     
         System.out.println( "Chief is in center, rearrange player order" ); 
+end
+
+
+rule "Player"
+	
+	when
+		$player : Player($pieces: pieces)
+		
+	then
+		for(Object $piecee : $pieces){
+			insert($piecee);
+		}
+		
+end
+
+rule "Piece"
+	
+	when
+		$chief : Piece(isDead()==false, class!=Millitant.class, $x : x, $y : y)
+	then
+		MinMaxNode $newMove = new MinMaxNode();
+		$newMove.setMove(new Move());
+		$newMove.getMove().setTileFrom($x, $y);
+		$newMove.getMove().setTileTo($x, $y+1);
+		$newMove.getMove().setPiece($chief);
+		$newMove.setPlayer($chief.getPlayer());
+		
+		insert($newMove);
+		
+		$newMove = new MinMaxNode();
+		$newMove.setMove(new Move());
+		$newMove.getMove().setTileFrom($x, $y);
+		$newMove.getMove().setTileTo($x+1, $y);
+		$newMove.getMove().setPiece($chief);
+		$newMove.setPlayer($chief.getPlayer());
+		
+		insert($newMove);
+		
+		$newMove = new MinMaxNode();
+		$newMove.setMove(new Move());
+		$newMove.getMove().setTileFrom($x, $y);
+		$newMove.getMove().setTileTo($x-1, $y);
+		$newMove.getMove().setPiece($chief);
+		$newMove.setPlayer($chief.getPlayer());
+		
+		insert($newMove);
+		
+		$newMove = new MinMaxNode();
+		$newMove.setMove(new Move());
+		$newMove.getMove().setTileFrom($x, $y);
+		$newMove.getMove().setTileTo($x, $y-1);
+		$newMove.getMove().setPiece($chief);
+		$newMove.setPlayer($chief.getPlayer());
+		
+		insert($newMove);
+		
+		$newMove = new MinMaxNode();
+		$newMove.setMove(new Move());
+		$newMove.getMove().setTileFrom($x, $y);
+		$newMove.getMove().setTileTo($x-1, $y-1);
+		$newMove.getMove().setPiece($chief);
+		$newMove.setPlayer($chief.getPlayer());
+		
+		insert($newMove);
+		
+		$newMove = new MinMaxNode();
+		$newMove.setMove(new Move());
+		$newMove.getMove().setTileFrom($x, $y);
+		$newMove.getMove().setTileTo($x+1, $y-1);
+		$newMove.getMove().setPiece($chief);
+		$newMove.setPlayer($chief.getPlayer());
+		
+		insert($newMove);
+		
+		$newMove = new MinMaxNode();
+		$newMove.setMove(new Move());
+		$newMove.getMove().setTileFrom($x, $y);
+		$newMove.getMove().setTileTo($x+1, $y+1);
+		$newMove.getMove().setPiece($chief);
+		$newMove.setPlayer($chief.getPlayer());
+		
+		insert($newMove);
+		
+		$newMove = new MinMaxNode();
+		$newMove.setMove(new Move());
+		$newMove.getMove().setTileFrom($x, $y);
+		$newMove.getMove().setTileTo($x-1, $y+1);
+		$newMove.getMove().setPiece($chief);
+		$newMove.setPlayer($chief.getPlayer());
+		
+		insert($newMove);
+end
+
+
+rule "MinMaxNode prunning"
+	salience 5
+	when 
+		$newMove: MinMaxNode(move.getTileTo() == null || (move.getTileTo().getPiece() != null 
+		&& move.getTileTo().getPiece().getPlayer() != move.getPiece().getPlayer()))
+	then 
+		delete($newMove);
+end
+
+
+rule "MinMax Expanding"
+	salience 4
+	when 
+		$newMove: MinMaxNode($x : move.piece.x, $y : move.piece.y, $x2 : move.tileTo.x, $y2 : move.tileTo.y)
+	then 
+		MinMaxNode $newMove2 = new MinMaxNode();
+		$newMove2.setMove(new Move());
+		$newMove2.getMove().setTileFrom($x, $y);
+		
+		int $x3 = $x2 - $x;
+		if($x3 != 0){
+			$x3 = $x3 / Math.abs($x3);
+		}
+		
+		int $y3 = $y2 - $y;
+		if($y3 != 0){
+			$y3 = $y3 / Math.abs($y3);
+		}
+		
+		
+		
+		$newMove2.getMove().setTileTo($x2 + $x3, $y2 + $y3);
+		$newMove2.getMove().setPiece($newMove.getMove().getPiece());
+		$newMove2.setPlayer($newMove.getMove().getPiece().getPlayer());
+		
+		insert($newMove2);
+		System.out.println($newMove2);
+end
+
+rule "Board"
+	
+	when
+		$board: Board()
+	then
+		System.out.println("test2");
 end

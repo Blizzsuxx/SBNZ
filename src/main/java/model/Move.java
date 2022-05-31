@@ -8,15 +8,16 @@ package model;
 public class Move {
 	private Move movesOnKill;
 	private Piece piece;
-	private Tile tile;
+	private Tile tileTo;
+	private Tile tileFrom;
 	public Move getMovesOnKill() {
 		return movesOnKill;
 	}
 	public Piece getPiece() {
 		return piece;
 	}
-	public Tile getTile() {
-		return tile;
+	public Tile getTileTo() {
+		return tileTo;
 	}
 	public Move setMovesOnKill(Move movesOnKill) {
 		this.movesOnKill = movesOnKill;
@@ -26,9 +27,12 @@ public class Move {
 		this.piece = piece;
 		return this;
 	}
-	public Move setTile(Tile tile) {
-		this.tile = tile;
-		return this;
+	public void setTileTo(Tile tile) {
+		this.tileTo = tile;
+	}
+	
+	public void setTileTo(int x, int y) {
+		this.tileTo = Game.getInstance().getBoard().getTile(x, y);
 	}
 	public Move linkMovesOnKill(Move _movesOnKill) {
 		setMovesOnKill(_movesOnKill);
@@ -38,8 +42,8 @@ public class Move {
 		setPiece(_piece);
 		return this;
 	}
-	public Move linkTile(Tile _tile) {
-		setTile(_tile);
+	public Move linkTileTo(Tile _tile) {
+		setTileTo(_tile);
 		return this;
 	}
 	public Move unlinkMovesOnKill() {
@@ -50,12 +54,31 @@ public class Move {
 		setPiece(null);
 		return this;
 	}
-	public Move unlinkTile() {
-		setTile(null);
+	public Move unlinkTileTo() {
+		setTileTo(null);
 		return this;
 	}
 	public void execute() {
 	}
 	public void undo() {
 	}
+	public Tile getTileFrom() {
+		return tileFrom;
+		
+	}
+	public void setTileFrom(Tile tileFrom) {
+		this.tileFrom = tileFrom;
+		
+	}
+	
+	public void setTileFrom(int x, int y) {
+		this.tileFrom = Game.getInstance().getBoard().getTile(x, y);
+	}
+	@Override
+	public String toString() {
+		return "Move [movesOnKill=" + movesOnKill + ", piece=" + piece + ", tileTo=" + tileTo + ", tileFrom=" + tileFrom
+				+ "]";
+	}
+	
+	
 }

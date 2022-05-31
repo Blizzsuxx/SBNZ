@@ -16,6 +16,9 @@ public class MinMaxNode {
 	private Move move;
 	private Set<MinMaxNode> children = new HashSet<>();
 	private Player player;
+	private int depth;
+	
+	
 	public ArrayList<Integer> getValues() {
 		return values;
 	}
@@ -72,4 +75,19 @@ public class MinMaxNode {
 		setPlayer(null);
 		return this;
 	}
+	public int getDepth() {
+		return depth;
+		
+	}
+	public void setDepth(int depth) {
+		this.depth = depth;
+		
+	}
+	@Override
+	public String toString() {
+		return "MinMaxNode [values=" + values + ", move=" + move + ", children=" + children + ", player=" + player
+				+ ", depth=" + depth + "]";
+	}
+	
+	
 }
