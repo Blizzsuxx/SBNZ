@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 
 public class Board {
-	private ArrayList<ArrayList<Tile>> tiles = new ArrayList<ArrayList<Tile>>();
+	private ArrayList<ArrayList<Tile>> tiles = new ArrayList<>();
 	private int rowCount = 9;
 	private int columnCount = 9;
-	
-	
+
+
 	public Board() {
 		for(int i = 0; i < this.columnCount; i++) {
 			tiles.add( new ArrayList<Tile>());
@@ -26,8 +26,8 @@ public class Board {
 			}
 		}
 	}
-	
-	
+
+
 	public ArrayList<ArrayList<Tile>> getTiles() {
 		return tiles;
 	}
@@ -49,10 +49,10 @@ public class Board {
 		this.columnCount = columnCount;
 		return this;
 	}
-	
+
 	public Tile getTile(int x, int y) {
 		try {
-		
+
 			return this.tiles.get(x).get(y);
 		}catch(Exception e) {
 			return null;

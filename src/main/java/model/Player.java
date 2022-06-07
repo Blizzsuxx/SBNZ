@@ -5,22 +5,22 @@
 */
 package model;
 
+import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 
 public class Player implements Killable {
 	private ArrayList<Piece> pieces = new ArrayList<>();
 	
-	
-	
+	private Color color;
+
+
 	public Player(int x, int y) {
 		int i = 1;
 		int j = 1;
 		if(x == 0 && y == 0) {
-			
+
 		} else if(x == Game.getInstance().getBoard().getColumnCount()-1 && y == 0) {
 			i = -1;
 		} else if(y == Game.getInstance().getBoard().getRowCount() - 1 && x == 0) {
@@ -38,10 +38,10 @@ public class Player implements Killable {
 		this.pieces.add(new Millitant(x+i+i, y+j, this));
 		this.pieces.add(new Millitant(x, y+j+j, this));
 		this.pieces.add(new Millitant(x+i, y+j+j, this));
-		
+
 	}
-	
-	
+
+
 	public ArrayList<Piece> getPieces() {
 		return pieces;
 	}
@@ -70,5 +70,28 @@ public class Player implements Killable {
 	@Override
 	public boolean isDead() {
 		return false;
+	}
+
+
+	public Color getColor() {
+		return color;
+		
+	}
+
+
+	public void setColor(Color color) {
+		this.color = color;
+		
+	}
+	
+	public int getIndex() {
+		int index = 0;
+		for(Player p : Game.getInstance().getPlayers()) {
+			if(p.equals(this)) {
+				return index;
+			}
+			index++;
+		}
+		return -1;
 	}
 }

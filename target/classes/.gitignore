@@ -1,4 +1,7 @@
+/META-INF/
+/com/
 /controller/
-/view/
-/rules/
+/logback-test.xml
 /model/
+/rules/
+/view/

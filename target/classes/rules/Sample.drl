@@ -27,29 +27,20 @@ rule "A Piece just got into center"
 end
 
 
-rule "Player"
-	
-	when
-		$player : Player($pieces: pieces)
-		
-	then
-		for(Object $piecee : $pieces){
-			insert($piecee);
-		}
-		
-end
-
 rule "Piece"
 	
 	when
-		$chief : Piece(isDead()==false, class!=Millitant.class, $x : x, $y : y)
+		$chief : Piece(isDead()==false, player == game.getCurrentPlayer(), $x : x, $y : y)
 	then
+		
 		MinMaxNode $newMove = new MinMaxNode();
 		$newMove.setMove(new Move());
 		$newMove.getMove().setTileFrom($x, $y);
 		$newMove.getMove().setTileTo($x, $y+1);
 		$newMove.getMove().setPiece($chief);
 		$newMove.setPlayer($chief.getPlayer());
+		$newMove.setParent(game.getRoot());
+		game.getRoot().addChild($newMove);
 		
 		insert($newMove);
 		
@@ -59,6 +50,8 @@ rule "Piece"
 		$newMove.getMove().setTileTo($x+1, $y);
 		$newMove.getMove().setPiece($chief);
 		$newMove.setPlayer($chief.getPlayer());
+		$newMove.setParent(game.getRoot());
+		game.getRoot().addChild($newMove);
 		
 		insert($newMove);
 		
@@ -68,6 +61,8 @@ rule "Piece"
 		$newMove.getMove().setTileTo($x-1, $y);
 		$newMove.getMove().setPiece($chief);
 		$newMove.setPlayer($chief.getPlayer());
+		$newMove.setParent(game.getRoot());
+		game.getRoot().addChild($newMove);
 		
 		insert($newMove);
 		
@@ -77,6 +72,8 @@ rule "Piece"
 		$newMove.getMove().setTileTo($x, $y-1);
 		$newMove.getMove().setPiece($chief);
 		$newMove.setPlayer($chief.getPlayer());
+		$newMove.setParent(game.getRoot());
+		game.getRoot().addChild($newMove);
 		
 		insert($newMove);
 		
@@ -86,6 +83,8 @@ rule "Piece"
 		$newMove.getMove().setTileTo($x-1, $y-1);
 		$newMove.getMove().setPiece($chief);
 		$newMove.setPlayer($chief.getPlayer());
+		$newMove.setParent(game.getRoot());
+		game.getRoot().addChild($newMove);
 		
 		insert($newMove);
 		
@@ -95,6 +94,8 @@ rule "Piece"
 		$newMove.getMove().setTileTo($x+1, $y-1);
 		$newMove.getMove().setPiece($chief);
 		$newMove.setPlayer($chief.getPlayer());
+		$newMove.setParent(game.getRoot());
+		game.getRoot().addChild($newMove);
 		
 		insert($newMove);
 		
@@ -104,6 +105,8 @@ rule "Piece"
 		$newMove.getMove().setTileTo($x+1, $y+1);
 		$newMove.getMove().setPiece($chief);
 		$newMove.setPlayer($chief.getPlayer());
+		$newMove.setParent(game.getRoot());
+		game.getRoot().addChild($newMove);
 		
 		insert($newMove);
 		
@@ -113,6 +116,8 @@ rule "Piece"
 		$newMove.getMove().setTileTo($x-1, $y+1);
 		$newMove.getMove().setPiece($chief);
 		$newMove.setPlayer($chief.getPlayer());
+		$newMove.setParent(game.getRoot());
+		game.getRoot().addChild($newMove);
 		
 		insert($newMove);
 end
@@ -125,6 +130,7 @@ rule "MinMaxNode prunning"
 		&& move.getTileTo().getPiece().getPlayer() != move.getPiece().getPlayer()))
 	then 
 		delete($newMove);
+		game.getRoot().getChildren().remove($newMove);
 end
 
 
@@ -147,20 +153,99 @@ rule "MinMax Expanding"
 			$y3 = $y3 / Math.abs($y3);
 		}
 		
+		if($newMove.getMove().getPiece().getClass() == Millitant.class){
+			if($newMove.getMove().getPiece().getX() + 2 < $x2+$x3){
+				return;
+			} else if($newMove.getMove().getPiece().getX() - 2 > $x2+$x3){
+				return;
+			} else if($newMove.getMove().getPiece().getY() + 2 < $y2+$y3){
+				return;
+			} else if($newMove.getMove().getPiece().getY() - 2 > $y2+$y3){
+				return;
+			}
+		}
 		
 		
 		$newMove2.getMove().setTileTo($x2 + $x3, $y2 + $y3);
 		$newMove2.getMove().setPiece($newMove.getMove().getPiece());
 		$newMove2.setPlayer($newMove.getMove().getPiece().getPlayer());
-		
+		$newMove2.setParent(game.getRoot());
+		game.getRoot().addChild($newMove2);
 		insert($newMove2);
-		System.out.println($newMove2);
 end
 
-rule "Board"
-	
+rule "Heuristics"
+	salience 3
 	when
-		$board: Board()
+		$newMove : MinMaxNode()
+		$numberOfSurvivors : Number() from accumulate(
+			Player($alive : isAlive()),
+			init(int survivors = 0;),
+			action(if($alive) survivors++;),
+			
+			result(survivors)
+		)
+		$nodeValues : ArrayList() from accumulate(
+			$player : Player($alive : isAlive()),
+			
+			init(
+			
+			ArrayList<Integer> values = new ArrayList<Integer>();
+			values.add(0);
+			values.add(0);
+			values.add(0);
+			values.add(0);
+			),
+			
+			action(if($alive) values.set($player.getIndex(), 48/$numberOfSurvivors+1);),
+			
+			result(values;)
+		)
+		
+		$pieceValues : ArrayList() from accumulate(
+			$piece : Piece($alive : isAlive()),
+			init(ArrayList<Integer> values = $nodeValues;),
+			
+			action(if($alive){
+				if($piece.getClass() == Millitant.class){
+					values.set($piece.getPlayer().getIndex(), values.get($piece.getPlayer().getIndex()) + 6);
+				} else if($piece.getClass() == Necromobile.class){
+					values.set($piece.getPlayer().getIndex(), values.get($piece.getPlayer().getIndex()) + 12);
+				} else if($piece.getClass() == Assasin.class){
+					values.set($piece.getPlayer().getIndex(), values.get($piece.getPlayer().getIndex()) + 18);
+				} else if($piece.getClass() == Diplomat.class){
+					values.set($piece.getPlayer().getIndex(), values.get($piece.getPlayer().getIndex()) + 12);
+				} else if($piece.getClass() == Reporter.class){
+					values.set($piece.getPlayer().getIndex(), values.get($piece.getPlayer().getIndex()) + 18);
+				} else if($piece.getClass() == Chief.class){
+					values.set($piece.getPlayer().getIndex(), values.get($piece.getPlayer().getIndex()) + 30);
+				} 
+			}
+			),
+			
+			result(values;)
+		)
+		
+		
+	
 	then
-		System.out.println("test2");
+		System.out.println("***************");
+		System.out.println($numberOfSurvivors);
+		System.out.println($nodeValues);
+		System.out.println($pieceValues);
+		System.out.println("***************");
+		
+
+end
+
+rule "Get Best Move For Current Player"
+	agenda-group "next"
+	salience 2
+	when
+		$newMove : MinMaxNode()
+	then
+		$newMove.getMove().execute();
+		game.setRoot($newMove);
+		game.nextPlayer();
+
 end

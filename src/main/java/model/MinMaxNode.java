@@ -14,19 +14,23 @@ import java.util.Set;
 public class MinMaxNode {
 	private ArrayList<Integer> values;
 	private Move move;
-	private Set<MinMaxNode> children = new HashSet<>();
+	private ArrayList<MinMaxNode> children = new ArrayList<>();
+	private MinMaxNode parent;
 	private Player player;
 	private int depth;
-	
-	
+
+
 	public ArrayList<Integer> getValues() {
 		return values;
 	}
 	public Move getMove() {
 		return move;
 	}
-	public Set<MinMaxNode> getChildren() {
+	public ArrayList<MinMaxNode> getChildren() {
 		return children;
+	}
+	public void addChild(MinMaxNode node) {
+		this.children.add(node);
 	}
 	public Player getPlayer() {
 		return player;
@@ -77,17 +81,25 @@ public class MinMaxNode {
 	}
 	public int getDepth() {
 		return depth;
-		
+
 	}
 	public void setDepth(int depth) {
 		this.depth = depth;
-		
+
 	}
 	@Override
 	public String toString() {
 		return "MinMaxNode [values=" + values + ", move=" + move + ", children=" + children + ", player=" + player
 				+ ", depth=" + depth + "]";
 	}
-	
-	
+	public MinMaxNode getParent() {
+		return parent;
+		
+	}
+	public void setParent(MinMaxNode parent) {
+		this.parent = parent;
+		
+	}
+
+
 }

@@ -1,7 +1,5 @@
 package controller;
 
-import model.MinMaxNode;
-
 public class Data {
 
 	private Object packet;

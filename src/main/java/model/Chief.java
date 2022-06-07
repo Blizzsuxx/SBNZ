@@ -14,9 +14,11 @@ public class Chief extends Piece {
 		super(i, j, player);
 		//TODO Auto-generated constructor stub
 	}
+	@Override
 	public List<Move> getMoves() {
 		return null;
 	}
+	@Override
 	public void captureEvent() {
 	}
 }

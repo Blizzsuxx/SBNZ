@@ -30,7 +30,7 @@ public class Move {
 	public void setTileTo(Tile tile) {
 		this.tileTo = tile;
 	}
-	
+
 	public void setTileTo(int x, int y) {
 		this.tileTo = Game.getInstance().getBoard().getTile(x, y);
 	}
@@ -64,13 +64,13 @@ public class Move {
 	}
 	public Tile getTileFrom() {
 		return tileFrom;
-		
+
 	}
 	public void setTileFrom(Tile tileFrom) {
 		this.tileFrom = tileFrom;
-		
+
 	}
-	
+
 	public void setTileFrom(int x, int y) {
 		this.tileFrom = Game.getInstance().getBoard().getTile(x, y);
 	}
@@ -79,6 +79,6 @@ public class Move {
 		return "Move [movesOnKill=" + movesOnKill + ", piece=" + piece + ", tileTo=" + tileTo + ", tileFrom=" + tileFrom
 				+ "]";
 	}
-	
-	
+
+
 }

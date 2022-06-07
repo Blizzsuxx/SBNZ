@@ -9,14 +9,15 @@ import java.util.List;
 
 
 public class Piece extends BoardObject implements Killable {
-	
+
 	private Tile tile;
 	private Player player;
-	
-	
+
+
 	public Piece(int i, int j, Player player) {
 		super(i, j);
 		this.tile = Game.getInstance().getBoard().getTile(i, j);
+		this.tile.setPiece(this);
 		this.player = player;
 		//TODO Auto-generated constructor stub
 	}

@@ -5,19 +5,24 @@
 */
 package model;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 
 public class Game {
-	
+
 	private static Game instance = null;
-	
+
 	private int aiDepth = 3;
 	private List<Player> players = new ArrayList<>();
 	private Board board;
-	
+	private MinMaxNode root;
+	private MinMaxNode actualRoot;
+	private Player currentPlayer;
+	private int currentPlayerCounter = 0;
+
 	public static Game getInstance() {
 		if(instance == null) {
 			instance = new Game();
@@ -31,10 +36,30 @@ public class Game {
 		this.players.add( new Player(this.board.getColumnCount()-1, 0));
 		this.players.add( new Player(0, this.board.getRowCount()-1));
 		this.players.add( new Player(this.board.getColumnCount()-1, this.board.getRowCount()-1));
-		
+		this.players.get(0).setColor(Color.BLUE);
+		this.players.get(1).setColor(Color.RED);
+		this.players.get(2).setColor(Color.GREEN);
+		this.players.get(3).setColor(Color.YELLOW);
+		this.currentPlayer = this.players.get(0);
+		this.root = new MinMaxNode();
+		this.actualRoot = this.root;
 	}
 	
+	public Player nextPlayer() {
+		this.currentPlayerCounter++;
+		this.currentPlayerCounter %= this.players.size();
+		this.currentPlayer = this.players.get(currentPlayerCounter);
+		return this.currentPlayer;
+	}
 	
+	public Player previousPlayer() {
+		this.currentPlayerCounter--;
+		this.currentPlayerCounter %= this.players.size();
+		this.currentPlayer = this.players.get(currentPlayerCounter);
+		return this.currentPlayer;
+	}
+
+
 	public int getAiDepth() {
 		return aiDepth;
 	}
@@ -76,7 +101,7 @@ public class Game {
 		setBoard(null);
 		return this;
 	}
-	
+
 	public Player nextPlayer(Player player) {
 		for(int i = 0; i < players.size(); i++) {
 			if(players.get(i).equals(player)) {
@@ -88,5 +113,37 @@ public class Game {
 	private Player getPlayer(int i) {
 		i = i % players.size();
 		return this.players.get(i);
+	}
+	public MinMaxNode getRoot() {
+		return root;
+		
+	}
+	public void setRoot(MinMaxNode root) {
+		this.root = root;
+		
+	}
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+		
+	}
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
+		
+	}
+	public int getCurrentPlayerCounter() {
+		return currentPlayerCounter;
+		
+	}
+	public void setCurrentPlayerCounter(int currentPlayerCounter) {
+		this.currentPlayerCounter = currentPlayerCounter;
+		
+	}
+	public MinMaxNode getActualRoot() {
+		return actualRoot;
+		
+	}
+	public void setActualRoot(MinMaxNode actualRoot) {
+		this.actualRoot = actualRoot;
+		
 	}
 }
