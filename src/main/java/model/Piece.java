@@ -5,6 +5,7 @@
 */
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,6 +13,8 @@ public class Piece extends BoardObject implements Killable {
 
 	private Tile tile;
 	private Player player;
+	private List<Move> availableMoves = new ArrayList<>();
+	private boolean dead = false;
 
 
 	public Piece(int i, int j, Player player) {
@@ -68,13 +71,27 @@ public class Piece extends BoardObject implements Killable {
 		}
 		return this;
 	}
-	@Override
-	public boolean isDead() {
-		return false;
-	}
+	
 	public List<Move> getMoves() {
 		return null;
 	}
 	public void captureEvent() {
 	}
+	public List<Move> getAvailableMoves() {
+		return availableMoves;
+		
+	}
+	public void setAvailableMoves(List<Move> availableMoves) {
+		this.availableMoves = availableMoves;
+		
+	}
+	public boolean isDead() {
+		return dead;
+		
+	}
+	public void setDead(boolean dead) {
+		this.dead = dead;
+		
+	}
+	
 }

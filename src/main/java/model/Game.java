@@ -22,6 +22,7 @@ public class Game {
 	private MinMaxNode actualRoot;
 	private Player currentPlayer;
 	private int currentPlayerCounter = 0;
+	private Move bestMove = null;
 
 	public static Game getInstance() {
 		if(instance == null) {
@@ -144,6 +145,23 @@ public class Game {
 	}
 	public void setActualRoot(MinMaxNode actualRoot) {
 		this.actualRoot = actualRoot;
+		
+	}
+	
+	public Player getLordPlayer() {
+		for(Player p : this.players) {
+			if(p.getChief().isCenter()) {
+				return p;
+			}
+		}
+		return null;
+	}
+	public Move getBestMove() {
+		return bestMove;
+		
+	}
+	public void setBestMove(Move bestMove) {
+		this.bestMove = bestMove;
 		
 	}
 }

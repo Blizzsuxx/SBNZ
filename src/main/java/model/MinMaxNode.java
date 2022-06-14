@@ -15,6 +15,7 @@ public class MinMaxNode {
 	private ArrayList<Integer> values;
 	private Move move;
 	private ArrayList<MinMaxNode> children = new ArrayList<>();
+	private MinMaxNode bestChild;
 	private MinMaxNode parent;
 	private Player player;
 	private int depth;
@@ -98,6 +99,14 @@ public class MinMaxNode {
 	}
 	public void setParent(MinMaxNode parent) {
 		this.parent = parent;
+		
+	}
+	public MinMaxNode getBestChild() {
+		return bestChild;
+		
+	}
+	public void setBestChild(MinMaxNode bestChild) {
+		this.bestChild = bestChild;
 		
 	}
 

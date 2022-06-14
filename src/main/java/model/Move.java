@@ -59,8 +59,38 @@ public class Move {
 		return this;
 	}
 	public void execute() {
+		
+		
+		
+		
+		
+		if(this.tileTo != null && this.tileTo.getPiece() != null && !(this.piece instanceof Diplomat)) {
+			this.tileTo.getPiece().setDead(true);
+			if( this.tileTo.getPiece() instanceof Chief) {
+				
+			}
+		}
+		
+		
+		if(this.tileTo != null)		this.piece.setTile(this.tileTo);
+		if(this.tileFrom != null)	this.tileFrom.setPiece(null);
+		if(this.tileTo != null)		this.tileTo.setPiece(this.piece);
+		
+		if(this.movesOnKill != null) {
+			this.movesOnKill.execute();
+		}
 	}
 	public void undo() {
+		
+		if(this.movesOnKill != null) {
+//			this.movesOnKill.undo();
+		}
+		
+		if(this.tileFrom != null && this.piece != null)	this.piece.setTile(this.tileFrom);
+		if(this.tileTo != null && this.tileTo.getPiece() != null  && this.tileTo.getPiece().equals(this.piece))	this.tileTo.setPiece(null);
+		if(this.tileFrom != null)	this.tileFrom.setPiece(this.piece);
+		
+		
 	}
 	public Tile getTileFrom() {
 		return tileFrom;

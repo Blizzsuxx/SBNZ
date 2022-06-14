@@ -94,4 +94,9 @@ public class Player implements Killable {
 		}
 		return -1;
 	}
+	
+	
+	public Chief getChief() {
+		return (Chief) this.pieces.get(0);
+	}
 }

@@ -5,8 +5,13 @@
 */
 package model;
 
+import java.awt.event.ActionListener;
+
+import view.TileButton;
+
 public class Tile extends BoardObject {
 	private Piece piece;
+	private TileButton tileButton;
 	public Tile(int i, int j) {
 		super(i, j);
 	}
@@ -15,6 +20,10 @@ public class Tile extends BoardObject {
 	}
 	public Tile setPiece(Piece piece) {
 		this.piece = piece;
+		if(this.tileButton != null) {
+			this.tileButton.setPiece(piece);
+		}
+		
 		return this;
 	}
 	public Tile linkPiece(Piece _piece) {
@@ -33,5 +42,14 @@ public class Tile extends BoardObject {
 			setPiece(null);
 		}
 		return this;
+	}
+	
+	public TileButton getTileButton() {
+		return tileButton;
+		
+	}
+	public void setTileButton(TileButton tileButton) {
+		this.tileButton = tileButton;
+		
 	}
 }
