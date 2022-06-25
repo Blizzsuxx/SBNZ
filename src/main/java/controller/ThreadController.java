@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.IOException;
+
 public class ThreadController {
 
 	private static ThreadController instance = null;
@@ -24,7 +26,12 @@ public class ThreadController {
 	public DroolsController getDroolsControllerInstance() {
 
 		if(this.droolsConctroller == null) {
-			this.droolsConctroller = new DroolsController(this.getData(), this);
+			try {
+				this.droolsConctroller = new DroolsController(this.getData(), this);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.droolsConctroller.start();
 		}
 

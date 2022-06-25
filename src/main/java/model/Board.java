@@ -58,4 +58,25 @@ public class Board {
 			return null;
 		}
 	}
+
+
+	@Override
+	public String toString() {
+		String string = "__________________________________________________________________\n|";
+		// TODO Auto-generated method stub
+		for(ArrayList<Tile> tiles : this.tiles) {
+			for(Tile tile : tiles) {
+				if(tile.getPiece() != null) {
+					string +=tile.getPiece().getClass().getSimpleName();
+				} else {
+					string += "Emtpy";
+				}
+				string += "|";
+			}
+			string += "\n__________________________________________________________________\n|";
+		}
+		return string;
+	}
+	
+	
 }

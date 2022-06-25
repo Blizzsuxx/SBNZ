@@ -46,7 +46,12 @@ public class TileButton extends JButton {
 	}
 	public void setPiece(Piece piece) {
 		if(piece != null) {
-			this.setBackground(piece.getPlayer().getColor());
+			if(piece.isDead()) {
+				this.setBackground(Color.WHITE);
+			} else {
+				this.setBackground(piece.getPlayer().getColor());
+			}
+			
 			this.setText(piece.getClass().getSimpleName());
 		} else {
 			this.setBackground(Color.GRAY);

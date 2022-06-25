@@ -1,0 +1,18 @@
+template header
+classOfNonEaters
+
+
+template "Non_Eaters"
+
+
+rule "Prune Non Eaters_@{row.rowNumber}"
+	salience 5
+	when
+		$minMaxNode : MinMaxNode(getMove() != null, getMove().getPiece().getClass() == @{classOfNonEaters})
+	then
+		$minMaxNode.getMove().getPiece().getAvailableMoves().remove($minMaxNode.getMove()); 
+		delete($minMaxNode);
+		
+end
+
+end template

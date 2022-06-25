@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import controller.ThreadController;
+
 
 public class Game {
 
@@ -44,6 +46,7 @@ public class Game {
 		this.currentPlayer = this.players.get(0);
 		this.root = new MinMaxNode();
 		this.actualRoot = this.root;
+		
 	}
 	
 	public Player nextPlayer() {

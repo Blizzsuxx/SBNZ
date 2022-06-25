@@ -59,9 +59,16 @@ public class Move {
 		return this;
 	}
 	public void execute() {
+//		System.out.println("******************************");
+//		System.out.println("******************************");
+//		System.out.println(Game.getInstance().getBoard().toString());
+//		
+//		
+//		System.out.println("******************************");
 		
-		
-		
+//		if(this.piece instanceof Necromobile) {
+//			System.out.println("AAA");
+//		}
 		
 		
 		if(this.tileTo != null && this.tileTo.getPiece() != null && !(this.piece instanceof Diplomat)) {
@@ -79,17 +86,28 @@ public class Move {
 		if(this.movesOnKill != null) {
 			this.movesOnKill.execute();
 		}
+		
+//		System.out.println(Game.getInstance().getBoard().toString());
+//		System.out.println("******************************");
+//		System.out.println("******************************");
 	}
 	public void undo() {
-		
-		if(this.movesOnKill != null) {
-//			this.movesOnKill.undo();
-		}
-		
+//		System.out.println("******************************");
+//		System.out.println("******************************");
+//		System.out.println(Game.getInstance().getBoard().toString());
+//		
+//		System.out.println("******************************");
 		if(this.tileFrom != null && this.piece != null)	this.piece.setTile(this.tileFrom);
 		if(this.tileTo != null && this.tileTo.getPiece() != null  && this.tileTo.getPiece().equals(this.piece))	this.tileTo.setPiece(null);
 		if(this.tileFrom != null)	this.tileFrom.setPiece(this.piece);
+		if(this.movesOnKill != null) {
+			this.movesOnKill.undo();
+			this.movesOnKill.getPiece().setDead(false);
+		}
 		
+//		System.out.println(Game.getInstance().getBoard().toString());
+//		System.out.println("******************************");
+//		System.out.println("******************************");
 		
 	}
 	public Tile getTileFrom() {
