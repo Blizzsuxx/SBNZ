@@ -378,7 +378,6 @@ rule "Player Changed"
 			game.setCurrentPlayer(lordPlayer);
 		}
 		for(Object move : allMoves){
-			System.out.println(nodePlayed);
 			if(!nodePlayed.equals(move)){
 			
 				delete(move);
@@ -388,6 +387,7 @@ rule "Player Changed"
 				}
 		}
 		System.out.println("AAAA");
+		System.out.println("BBBB");
 		delete($event);
 		game.setRoot(nodePlayed);
 		for(Player player : game.getPlayers()){

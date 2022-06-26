@@ -49,7 +49,6 @@ public class TileButton extends JButton {
 						if(move.getMove().getTileTo().equals(tile)) {
 							if(move.getMove().getMovesOnKill() != null) {
 								Game.getInstance().setKillTile(tile);
-								System.out.println("set kill tile to: " + tile);
 								move.getMove().getMovesOnKill().getTileTo().getTileButton().setBackground(Color.pink);
 								restart = false;
 								continue;
@@ -72,9 +71,7 @@ public class TileButton extends JButton {
 				} else if(Game.getInstance().getKillTile() != null) {
 					resetBoardColor();
 					for(MinMaxNode move : Game.getInstance().getCurrentSelectedPiece().getAvailableMoves()) {
-						System.out.println(move);
 						if(move.getMove().getTileTo().equals(Game.getInstance().getKillTile()) &&  move.getMove().getMovesOnKill().getTileTo().equals(tile) ) {
-							System.out.println("usao usao usao");
 							move.getMove().execute();
 							resetBoardColor();
 							

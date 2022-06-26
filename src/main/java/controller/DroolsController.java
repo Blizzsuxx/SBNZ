@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -43,12 +45,25 @@ public class DroolsController extends Thread {
 	}
 
 
-	@SuppressWarnings("restriction")
-	DroolsController(Data data, ThreadController threadController) throws IOException {
+	
+	DroolsController(Data data, ThreadController threadController) {
 		
 		this.load = data;
 		this.threadController = threadController;
 		
+		try {
+			this.init();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("restriction")
+	public void init() throws IOException {
+		if(this.kSession != null) {
+			this.kSession.dispose();
+		}
 		Collection<ParamSet> paramSets = new ArrayList<ParamSet>();
 
 		// populate paramSets
@@ -59,9 +74,10 @@ public class DroolsController extends Thread {
 		ObjectDataCompiler converter = new ObjectDataCompiler();
 		InputStream templateStream =
 
-		    this.getClass().getResourceAsStream( "/templates/template.drt" );
+		    new FileInputStream(new File( "resources/templates/template.drt" ));
 		
 		String drl = converter.compile( paramSets, templateStream );
+		
 		paramSets.clear();
 		ParamSet set = new ParamSet("Assasin.class");
 		paramSets.add(set);
@@ -76,19 +92,18 @@ public class DroolsController extends Thread {
 		
 		templateStream =
 
-			    this.getClass().getResourceAsStream( "/templates/non_corpse_eaters.drt" );
+			    new FileInputStream( "resources/templates/non_corpse_eaters.drt" );
 			
 		drl += "\n"+converter.compile( paramSets, templateStream );
 			
 		
-		templateStream = this.getClass().getResourceAsStream( "/rules/Sample.drl" );
+		templateStream = new FileInputStream( "resources/rules/Sample.drl" );
 		
 		String sample = new String(templateStream.readAllBytes());
 		
 		sample += "\n" + drl;
 		this.kSession = this.createKieSessionFromDRL(sample);
 	}
-	
 	
 
 	@Override
@@ -127,6 +142,12 @@ public class DroolsController extends Thread {
 	}
 
 	public void fireAllRules() {
+		try {
+			sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.kSession.fireAllRules();
 	}
 

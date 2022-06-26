@@ -372,13 +372,11 @@ rule "Player Changed"
 		$event : PlayerChangedEvent($player : newPlayer, nodePlayed : move, $previousPlayer : previousPlayer)
 		allMoves : List() from collect(MinMaxNode())
 	then
-		System.out.println("AAAAAAA");
 		Player lordPlayer = game.getLordPlayer();
 		if(lordPlayer != null && lordPlayer != $previousPlayer){
 			game.previousPlayer();
 			game.setCurrentPlayer(lordPlayer);
 		}
-		System.out.println("BBBBBB");
 		for(Object move : allMoves){
 			System.out.println(nodePlayed);
 			if(!nodePlayed.equals(move)){
@@ -389,10 +387,9 @@ rule "Player Changed"
 			
 				}
 		}
-		System.out.println("CCCCC");
+		System.out.println("AAAA");
 		delete($event);
 		game.setRoot(nodePlayed);
-		System.out.println("DDDD");
 		for(Player player : game.getPlayers()){
 			for(Piece piece : player.getPieces()){
 				if(piece.getAvailableMoves() != null){

@@ -81,7 +81,6 @@ public class Move {
 //		
 //		
 //		System.out.println("******************************");
-		System.out.println(this);
 //		if(this.piece instanceof Necromobile) {
 //			System.out.println("AAA");
 //		}

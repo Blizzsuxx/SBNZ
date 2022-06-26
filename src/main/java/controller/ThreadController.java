@@ -26,12 +26,7 @@ public class ThreadController {
 	public DroolsController getDroolsControllerInstance() {
 
 		if(this.droolsConctroller == null) {
-			try {
-				this.droolsConctroller = new DroolsController(this.getData(), this);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			this.droolsConctroller = new DroolsController(this.getData(), this);
 			this.droolsConctroller.start();
 		}
 
