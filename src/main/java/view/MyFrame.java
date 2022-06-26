@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import controller.DroolsController;
+import model.Game;
+import model.MinMaxNode;
 import net.miginfocom.swing.MigLayout;
 
 public class MyFrame extends JFrame {
@@ -30,7 +32,7 @@ public class MyFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				DroolsController.getInstance().fireAllRules();
-				System.out.println("test");
+				
 			}
 		});
 		this.add(fireRules, "wrap");

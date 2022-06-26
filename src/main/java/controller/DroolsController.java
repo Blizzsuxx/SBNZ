@@ -5,12 +5,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.drools.core.ClockType;
 import org.drools.template.ObjectDataCompiler;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.ClockTypeOption;
 import org.kie.api.KieBase;
+import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.builder.*;
+import org.kie.api.conf.EventProcessingOption;
 
 import model.Game;
 import model.Necromobile;
@@ -49,14 +54,32 @@ public class DroolsController extends Thread {
 		// populate paramSets
 
 		paramSets.add( new ParamSet( "Necromobile.class" ) );
-
-
+		paramSets.add( new ParamSet( "Reporter.class" ) );
+		
 		ObjectDataCompiler converter = new ObjectDataCompiler();
 		InputStream templateStream =
 
 		    this.getClass().getResourceAsStream( "/templates/template.drt" );
 		
 		String drl = converter.compile( paramSets, templateStream );
+		paramSets.clear();
+		ParamSet set = new ParamSet("Assasin.class");
+		paramSets.add(set);
+		set = new ParamSet("Millitant.class");
+		paramSets.add(set);
+		set = new ParamSet("Chief.class");
+		paramSets.add(set);
+		set = new ParamSet("Diplomat.class");
+		paramSets.add(set);
+		set = new ParamSet("Reporter.class");
+		paramSets.add(set);
+		
+		templateStream =
+
+			    this.getClass().getResourceAsStream( "/templates/non_corpse_eaters.drt" );
+			
+		drl += "\n"+converter.compile( paramSets, templateStream );
+			
 		
 		templateStream = this.getClass().getResourceAsStream( "/rules/Sample.drl" );
 		
@@ -75,7 +98,7 @@ public class DroolsController extends Thread {
           receivedMessage = load.receive()) {
 
         	if(receivedMessage instanceof Game) {
-        		this.kSession.setGlobal("game", receivedMessage);
+//        		this.kSession.setGlobal("game", receivedMessage);
         		Game game = (Game) receivedMessage;
         		for(Player p : game.getPlayers()) {
         			this.addToRules(p);
@@ -84,7 +107,9 @@ public class DroolsController extends Thread {
         			}
         		}
         		this.addToRules(game.getRoot());
+        		this.addToRules(game);
         	} else {
+        		System.out.println(receivedMessage.getClass());
         		this.addToRules(receivedMessage);
         	}
 
@@ -133,8 +158,17 @@ public class DroolsController extends Thread {
 		}
 		this.kieContainer =
 		    kieServices.newKieContainer( kieServices.getRepository().getDefaultReleaseId() );
-		this.kieBase = kieContainer.getKieBase();
-		return kieContainer.newKieSession();
+		
+		KieBaseConfiguration kbconf = kieServices.newKieBaseConfiguration();
+		kbconf.setOption(EventProcessingOption.STREAM);
+		
+		this.kieBase = kieContainer.newKieBase(kbconf);
+		
+		
+		KieSessionConfiguration ksconf1 = kieServices.newKieSessionConfiguration();
+        ksconf1.setOption(ClockTypeOption.get(ClockType.REALTIME_CLOCK.getId()));
+        return kieBase.newKieSession(ksconf1, null);
+		
     }
 
 }

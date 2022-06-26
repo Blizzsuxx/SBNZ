@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import controller.GameController;
 import controller.ThreadController;
 
 
@@ -25,6 +26,8 @@ public class Game {
 	private Player currentPlayer;
 	private int currentPlayerCounter = 0;
 	private Move bestMove = null;
+	private Tile killTile;
+	private Piece currentSelectedPiece;
 
 	public static Game getInstance() {
 		if(instance == null) {
@@ -37,8 +40,10 @@ public class Game {
 		this.board = new Board();
 		this.players.add( new Player(0, 0));
 		this.players.add( new Player(this.board.getColumnCount()-1, 0));
-		this.players.add( new Player(0, this.board.getRowCount()-1));
+		
 		this.players.add( new Player(this.board.getColumnCount()-1, this.board.getRowCount()-1));
+		
+		this.players.add( new Player(0, this.board.getRowCount()-1));
 		this.players.get(0).setColor(Color.BLUE);
 		this.players.get(1).setColor(Color.RED);
 		this.players.get(2).setColor(Color.GREEN);
@@ -52,14 +57,40 @@ public class Game {
 	public Player nextPlayer() {
 		this.currentPlayerCounter++;
 		this.currentPlayerCounter %= this.players.size();
-		this.currentPlayer = this.players.get(currentPlayerCounter);
+		Player temp = this.players.get(currentPlayerCounter);
+		if(temp.isDead()) {
+			return nextPlayer();
+		}
+		this.currentPlayer = temp;
+		GameController.getInstance().send(new PlayerChangedEvent(currentPlayer));
+		return this.currentPlayer;
+	}
+	
+	public Player nextPlayer(MinMaxNode movePlayed) {
+		Player previousPlayer = this.currentPlayer;
+		this.currentPlayerCounter++;
+		this.currentPlayerCounter %= this.players.size();
+		Player temp = this.players.get(currentPlayerCounter);
+		if(temp.isDead()) {
+			return nextPlayer(movePlayed);
+		}
+		this.currentPlayer = temp;
+		GameController.getInstance().send(new PlayerChangedEvent(currentPlayer, previousPlayer, movePlayed));
 		return this.currentPlayer;
 	}
 	
 	public Player previousPlayer() {
 		this.currentPlayerCounter--;
 		this.currentPlayerCounter %= this.players.size();
-		this.currentPlayer = this.players.get(currentPlayerCounter);
+		
+		if(this.currentPlayerCounter < 0) {
+			this.currentPlayerCounter += players.size();
+		}
+		Player temp = this.players.get(currentPlayerCounter);
+		if(temp.isDead()) {
+			return previousPlayer();
+		}
+		this.currentPlayer = temp;
 		return this.currentPlayer;
 	}
 
@@ -114,8 +145,11 @@ public class Game {
 		}
 		return null;
 	}
-	private Player getPlayer(int i) {
+	public Player getPlayer(int i) {
 		i = i % players.size();
+		if(i < 0) {
+			i += players.size();
+		}
 		return this.players.get(i);
 	}
 	public MinMaxNode getRoot() {
@@ -153,7 +187,7 @@ public class Game {
 	
 	public Player getLordPlayer() {
 		for(Player p : this.players) {
-			if(p.getChief().isCenter()) {
+			if(p.getChief().isCenter() && !p.isDead()) {
 				return p;
 			}
 		}
@@ -165,6 +199,22 @@ public class Game {
 	}
 	public void setBestMove(Move bestMove) {
 		this.bestMove = bestMove;
+		
+	}
+	public Piece getCurrentSelectedPiece() {
+		return currentSelectedPiece;
+		
+	}
+	public void setCurrentSelectedPiece(Piece currentSelectedPiece) {
+		this.currentSelectedPiece = currentSelectedPiece;
+		
+	}
+	public Tile getKillTile() {
+		return killTile;
+		
+	}
+	public void setKillTile(Tile killTile) {
+		this.killTile = killTile;
 		
 	}
 }

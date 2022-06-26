@@ -7,7 +7,10 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 
+import controller.DroolsController;
+import controller.GameController;
 import model.Game;
+import model.MinMaxNode;
 import model.Move;
 import model.Piece;
 import model.Tile;
@@ -28,16 +31,69 @@ public class TileButton extends JButton {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				for(ArrayList<Tile> tiles : Game.getInstance().getBoard().getTiles()) {
-					for(Tile t : tiles) {
-						t.getTileButton().resetColor();
+				if((Game.getInstance().getCurrentSelectedPiece() == null) && Game.getInstance().getKillTile() == null) {
+					resetBoardColor();
+					if(tile.getPiece() != null) {
+						for(MinMaxNode move : tile.getPiece().getAvailableMoves()) {
+							move.getMove().getTileTo().getTileButton().setBackground(Color.PINK);
+						}
+						Game.getInstance().setCurrentSelectedPiece(tile.getPiece());
+						Game.getInstance().setKillTile(null);
 					}
-				}
-				if(tile.getPiece() != null) {
-					for(Move move : tile.getPiece().getAvailableMoves()) {
-						move.getTileTo().getTileButton().setBackground(Color.PINK);
+					
+				} else if((Game.getInstance().getCurrentSelectedPiece() != null) && Game.getInstance().getKillTile() == null) {
+					resetBoardColor();
+					boolean restart = true;
+					for(MinMaxNode move : Game.getInstance().getCurrentSelectedPiece().getAvailableMoves()) {
+						
+						if(move.getMove().getTileTo().equals(tile)) {
+							if(move.getMove().getMovesOnKill() != null) {
+								Game.getInstance().setKillTile(tile);
+								System.out.println("set kill tile to: " + tile);
+								move.getMove().getMovesOnKill().getTileTo().getTileButton().setBackground(Color.pink);
+								restart = false;
+								continue;
+							}
+							move.getMove().execute();
+							resetBoardColor();
+							
+							Game.getInstance().nextPlayer(move);
+							
+							DroolsController.getInstance().fireAllRules();
+							break;
+						}
+						
 					}
+					if (restart) {
+						Game.getInstance().setCurrentSelectedPiece(null);
+						Game.getInstance().setKillTile(null);
+					}
+					
+				} else if(Game.getInstance().getKillTile() != null) {
+					resetBoardColor();
+					for(MinMaxNode move : Game.getInstance().getCurrentSelectedPiece().getAvailableMoves()) {
+						System.out.println(move);
+						if(move.getMove().getTileTo().equals(Game.getInstance().getKillTile()) &&  move.getMove().getMovesOnKill().getTileTo().equals(tile) ) {
+							System.out.println("usao usao usao");
+							move.getMove().execute();
+							resetBoardColor();
+							
+							Game.getInstance().nextPlayer(move);
+							
+							DroolsController.getInstance().fireAllRules();
+							break;
+						}
+						
+					}
+					
+					
+					Game.getInstance().setCurrentSelectedPiece(null);
+					Game.getInstance().setKillTile(null);
+				} else {
+					Game.getInstance().setCurrentSelectedPiece(null);
+					Game.getInstance().setKillTile(null);
 				}
+				
 			}
 		});
 	}
@@ -53,6 +109,9 @@ public class TileButton extends JButton {
 			}
 			
 			this.setText(piece.getClass().getSimpleName());
+		} else if(tile.isCenter()) {
+			this.setBackground(Color.BLACK);
+			this.setText("");
 		} else {
 			this.setBackground(Color.GRAY);
 			this.setText("");
@@ -74,6 +133,23 @@ public class TileButton extends JButton {
 	
 	public void resetColor() {
 		this.setPiece(this.getPiece());
+	}
+	
+	public void resetBoardColor() {
+		for(ArrayList<Tile> tiles : Game.getInstance().getBoard().getTiles()) {
+			for(Tile t : tiles) {
+				t.getTileButton().resetColor();
+			}
+		}
+		if(Game.getInstance().getBestMove() != null) {
+			Game.getInstance().getBestMove().getTileFrom().getTileButton().setBackground(Color.magenta);
+			Game.getInstance().getBestMove().getTileTo().getTileButton().setBackground(Color.magenta);
+			if(Game.getInstance().getBestMove().getMovesOnKill() != null) {
+				Game.getInstance().getBestMove().getMovesOnKill().getTileTo().getTileButton().setBackground(Color.magenta);
+			}
+		}
+		
+		
 	}
 	
 

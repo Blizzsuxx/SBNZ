@@ -1,0 +1,19 @@
+template header
+classOfNonEaters
+
+template "Non_Corpse_Takers"
+
+
+rule "Prune Non CorpseTakers_@{row.rowNumber}"
+	salience 4
+	when
+		game : Game()
+		$minMaxNode : MinMaxNode(this != game.getRoot(), getMove() != null, getMove().getPiece().getClass() == @{classOfNonEaters}, getMove().getTileTo() !=null, getMove().getTileTo().getPiece() != null, getMove().getTileTo().getPiece().isDead() == true)
+	then
+		$minMaxNode.getMove().getPiece().getAvailableMoves().remove($minMaxNode); 
+		delete($minMaxNode);
+		game.getRoot().getChildren().remove($minMaxNode);
+		
+end
+
+end template

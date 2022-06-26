@@ -69,7 +69,7 @@ public class Player implements Killable {
 	}
 	@Override
 	public boolean isDead() {
-		return false;
+		return this.getChief().isDead();
 	}
 
 

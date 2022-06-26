@@ -58,7 +58,15 @@ public class Board {
 			return null;
 		}
 	}
-
+	
+	public Tile getEmptyTile(int x, int y) {
+		Tile tile = this.getTile(x, y);
+		if(tile != null && tile.getPiece() == null) {
+			return tile;
+		} else {
+			return null;
+		}
+	}
 
 	@Override
 	public String toString() {

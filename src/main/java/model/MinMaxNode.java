@@ -8,24 +8,42 @@ package model;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 
 public class MinMaxNode {
-	private Integer[] values = {0,0,0,0};
+	private Double[] values = {0.0,0.0,0.0,0.0};
 	private Move move;
-	private ArrayList<MinMaxNode> children = new ArrayList<>();
+	private List<MinMaxNode> children = new LinkedList<>();
 	private MinMaxNode bestChild;
 	private MinMaxNode parent;
 	private Player player;
 	private int depth;
+	
+	public MinMaxNode(MinMaxNode node) {
+		for(int i = 0; i < this.values.length; i++) {
+			this.values[i] = node.values[i];
+		}
+		this.move = new Move(node.move);
+		this.player = node.player;
+		this.depth = node.depth;
+		this.parent = node.parent;
+		
+	}
 
 
-	public Integer[] getValues() {
+	public MinMaxNode() {
+		//TODO Auto-generated constructor stub
+	}
+
+
+	public Double[] getValues() {
 		return values;
 	}
 	
-	public ArrayList<MinMaxNode> getChildren() {
+	public List<MinMaxNode> getChildren() {
 		return children;
 	}
 	public void addChild(MinMaxNode node) {
@@ -34,7 +52,7 @@ public class MinMaxNode {
 	public Player getPlayer() {
 		return player;
 	}
-	public MinMaxNode setValues(Integer[] values) {
+	public MinMaxNode setValues(Double[] values) {
 		this.values = values;
 		return this;
 	}
@@ -130,11 +148,11 @@ public class MinMaxNode {
 		Player lordPlayer = Game.getInstance().getLordPlayer();
 		for(Player player : Game.getInstance().getPlayers()) {
 			if(!player.isDead() && lordPlayer == null) {
-				values[player.getIndex()] = 48/survivors;
+				values[player.getIndex()] = 48.0/survivors;
 			} else if(!player.isDead() && lordPlayer.equals(player)) {
-				values[player.getIndex()] = 48;
+				values[player.getIndex()] = 48.0;
 			} else {
-				values[player.getIndex()] = 0;
+				values[player.getIndex()] = 0.0;
 			}
 			
 		}
@@ -146,16 +164,23 @@ public class MinMaxNode {
 				if(!piece.isDead()){
 					if(piece.getClass() == Millitant.class){
 						values[piece.getPlayer().getIndex()] += 6;
+						values[piece.getPlayer().getIndex()] += 6 - (Math.abs(4-piece.getX()) + Math.abs(4-piece.getY()));
 					} else if(piece.getClass() == Necromobile.class){
 						values[piece.getPlayer().getIndex()] += 12;
+						values[piece.getPlayer().getIndex()] += 6 - ((Math.abs(4-piece.getX()) + Math.abs(4-piece.getY()))* 0.5);
 					} else if(piece.getClass() == Assasin.class){
 						values[piece.getPlayer().getIndex()] += 18;
+						values[piece.getPlayer().getIndex()] += 6 - ((Math.abs(4-piece.getX()) + Math.abs(4-piece.getY()))* 0.7);
 					} else if(piece.getClass() == Diplomat.class){
 						values[piece.getPlayer().getIndex()] += 12;
+						values[piece.getPlayer().getIndex()] += 6 - ((Math.abs(4-piece.getX()) + Math.abs(4-piece.getY()))* 0.6);
 					} else if(piece.getClass() == Reporter.class){
 						values[piece.getPlayer().getIndex()] += 18;
+						values[piece.getPlayer().getIndex()] += 6 - ((Math.abs(4-piece.getX()) + Math.abs(4-piece.getY()))* 0.6);
 					} else if(piece.getClass() == Chief.class){
-						values[piece.getPlayer().getIndex()] += 30;
+						values[piece.getPlayer().getIndex()] += 40;
+						if(piece.isCenter()) values[piece.getPlayer().getIndex()] += 30;
+						values[piece.getPlayer().getIndex()] += 6 - ((Math.abs(4-piece.getX()) + Math.abs(4-piece.getY()))* 0.5);
 					} 
 				} else {
 					for(Player p2 : Game.getInstance().getPlayers()){
@@ -172,7 +197,7 @@ public class MinMaxNode {
 								} else if(piece.getClass() == Reporter.class){
 									values[p2.getIndex()] += (18/survivors);
 								} else if(piece.getClass() == Chief.class){
-									values[p2.getIndex()] += (30/survivors);
+									values[p2.getIndex()] += (40/survivors);
 								} 
 							} else {
 								if(piece.getClass() == Millitant.class){
@@ -186,7 +211,7 @@ public class MinMaxNode {
 								} else if(piece.getClass() == Reporter.class){
 									values[p2.getIndex()] += (18);
 								} else if(piece.getClass() == Chief.class){
-									values[p2.getIndex()] += (30);
+									values[p2.getIndex()] += (40);
 								} 
 							
 							}

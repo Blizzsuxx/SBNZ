@@ -6,6 +6,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -13,7 +14,7 @@ public class Piece extends BoardObject implements Killable {
 
 	private Tile tile;
 	private Player player;
-	private List<Move> availableMoves = new ArrayList<>();
+	private List<MinMaxNode> availableMoves = new LinkedList<>();
 	private boolean dead = false;
 
 
@@ -32,6 +33,8 @@ public class Piece extends BoardObject implements Killable {
 	}
 	public Piece setTile(Tile tile) {
 		this.tile = tile;
+		this.setX(this.tile.getX());
+		this.setY(this.tile.getY());
 		return this;
 	}
 	public Piece setPlayer(Player player) {
@@ -77,11 +80,11 @@ public class Piece extends BoardObject implements Killable {
 	}
 	public void captureEvent() {
 	}
-	public List<Move> getAvailableMoves() {
+	public List<MinMaxNode> getAvailableMoves() {
 		return availableMoves;
 		
 	}
-	public void setAvailableMoves(List<Move> availableMoves) {
+	public void setAvailableMoves(List<MinMaxNode> availableMoves) {
 		this.availableMoves = availableMoves;
 		
 	}

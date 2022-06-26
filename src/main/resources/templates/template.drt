@@ -6,13 +6,16 @@ template "Non_Eaters"
 
 
 rule "Prune Non Eaters_@{row.rowNumber}"
-	salience 5
+	salience 4
 	when
-		$minMaxNode : MinMaxNode(getMove() != null, getMove().getPiece().getClass() == @{classOfNonEaters})
+		game : Game()
+		$minMaxNode : MinMaxNode(this != game.getRoot(), getMove() != null, getMove().getPiece().getClass() == @{classOfNonEaters}, getMove().getTileTo() !=null, getMove().getTileTo().getPiece() != null, getMove().getTileTo().getPiece().isDead() != true)
 	then
-		$minMaxNode.getMove().getPiece().getAvailableMoves().remove($minMaxNode.getMove()); 
+		$minMaxNode.getMove().getPiece().getAvailableMoves().remove($minMaxNode); 
 		delete($minMaxNode);
+		game.getRoot().getChildren().remove($minMaxNode);
 		
 end
 
 end template
+

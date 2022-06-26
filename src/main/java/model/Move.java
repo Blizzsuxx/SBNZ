@@ -5,6 +5,8 @@
 */
 package model;
 
+import java.util.ArrayList;
+
 public class Move {
 	private Move movesOnKill;
 	private Piece piece;
@@ -13,10 +15,24 @@ public class Move {
 	public Move getMovesOnKill() {
 		return movesOnKill;
 	}
+	
+	public Move(Move move) {
+		this.tileFrom = move.tileFrom;
+		this.tileTo = move.tileTo;
+		this.piece = move.piece;
+		this.movesOnKill = move.movesOnKill;
+	}
+	
+	public Move() {
+		
+	}
+	
+	
 	public Piece getPiece() {
 		return piece;
 	}
 	public Tile getTileTo() {
+		ArrayList<String> s = new ArrayList<String>();
 		return tileTo;
 	}
 	public Move setMovesOnKill(Move movesOnKill) {
@@ -65,7 +81,7 @@ public class Move {
 //		
 //		
 //		System.out.println("******************************");
-		
+		System.out.println(this);
 //		if(this.piece instanceof Necromobile) {
 //			System.out.println("AAA");
 //		}
@@ -79,14 +95,14 @@ public class Move {
 		}
 		
 		
-		if(this.tileTo != null)		this.piece.setTile(this.tileTo);
-		if(this.tileFrom != null)	this.tileFrom.setPiece(null);
+		if(this.tileTo != null && this.piece != null)		this.piece.setTile(this.tileTo);
+		if(this.tileFrom != null && this.tileFrom.getPiece().equals(this.piece))	this.tileFrom.setPiece(null);
 		if(this.tileTo != null)		this.tileTo.setPiece(this.piece);
 		
 		if(this.movesOnKill != null) {
 			this.movesOnKill.execute();
 		}
-		
+//		
 //		System.out.println(Game.getInstance().getBoard().toString());
 //		System.out.println("******************************");
 //		System.out.println("******************************");
@@ -102,7 +118,10 @@ public class Move {
 		if(this.tileFrom != null)	this.tileFrom.setPiece(this.piece);
 		if(this.movesOnKill != null) {
 			this.movesOnKill.undo();
-			this.movesOnKill.getPiece().setDead(false);
+			if(!(this.piece instanceof Necromobile)) {
+				this.movesOnKill.getPiece().setDead(false);
+			}
+			
 		}
 		
 //		System.out.println(Game.getInstance().getBoard().toString());

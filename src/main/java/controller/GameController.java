@@ -10,10 +10,18 @@ public class GameController extends Thread {
 
 	private Data load;
 	private ThreadController threadController;
+	
+	private static GameController instance;
+	
+	public static GameController getInstance() {
+		if(instance == null) {
+			instance = ThreadController.getInstance().getGameControllerInstance();
+		}
+		return instance;
+	}
 
 	public GameController(Data load, ThreadController threadController) {
 		super();
-		System.out.println("test");
 		this.load = load;
 		this.threadController = threadController;
 	}
@@ -31,6 +39,11 @@ public class GameController extends Thread {
 				load.send("Game Over");
 			}
 		});
+	}
+	
+	
+	public void send(Object data) {
+		this.load.send(data);
 	}
 
 }
